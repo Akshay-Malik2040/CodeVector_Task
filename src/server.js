@@ -1,9 +1,20 @@
 const express=require('express');
 const connectDB=require('./config/db')
-const app=express();
+const cors = require('cors');
+const productRoutes = require('./routes/productRoutes');
 require('dotenv').config();
 
+const app=express();
 const PORT=process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/products', productRoutes);
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', message: 'API is running' });
+});
 
 connectDB()
   .then(() => {
